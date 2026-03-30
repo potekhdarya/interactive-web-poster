@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Фреймворк</title>
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/lines/LineSegmentsGeometry.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/lines/LineGeometry.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/lines/LineMaterial.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/lines/LineSegments2.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/lines/Line2.js"
+    ></script>
+    <script defer src="javascripts/router.js"></script>
+    <script defer src="javascripts/time.js"></script>
+    <script defer src="javascripts/three-init.js"></script>
+    <script defer src="javascripts/sound.js"></script>
+    <script defer src="javascripts/threshold.js"></script>
+    <script defer src="javascripts/diagform.js"></script>
+    <script defer src="javascripts/tracking.js"></script>
+    <script defer src="javascripts/journal.js"></script>
+
+    <style>
+      .page {
+        display: none;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+      }
+      .page.active {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════════
+         СТРАНИЦА 1 — ГЛАВНАЯ
+    ════════════════════════════════════════════════ -->
+    <section class="page active" id="page-main">
+      <div class="pageWrapper">
+        <nav class="navBar">
+          <a class="navLink" href="#" onclick="showPage('main')"
+            >Центр Фреймворк</a
+          >
+          <a class="navLink" href="#" onclick="showPage('journal')"
+            >Журнал наблюдений</a
+          >
+          <a class="navLink" href="#" onclick="showPage('sound')"
+            >Конструктор звука</a
+          >
+          <a class="navLink" href="#" onclick="showPage('diagnostics')"
+            >Диагностика</a
+          >
+        </nav>
+
+        <main class="mainRect">
+          <canvas id="threeCanvas" onclick="showPanopticonInfo()"></canvas>
+          <div id="panopticonTooltip" class="panopticonTooltip">
+            Главный корпус вдохновлён бентамовской конструкцией. В подобной
+            архитектуре звук распределяется равномерно, что делает
+            терапевтическое воздействие полным.
+          </div>
+        </main>
+
+        <footer class="footerBar">
+          <div class="footerTime">
+            <span id="timeVKV">UTC: --:--:--</span><br />
+            <span id="timeMSK">МСК: --:--:--</span>
+          </div>
+          <div></div>
+          <a class="footerArrow" href="#" onclick="showPage('sound')">
+            <img src="images/arrowRight.svg" alt="→" />
+          </a>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         СТРАНИЦА 2 — КОНСТРУКТОР ЗВУКА
+    ════════════════════════════════════════════════ -->
+    <section class="page" id="page-sound">
+      <div class="pageWrapper">
+        <nav class="timeBar">
+          <div><span id="timeVKV2">UTC: --:--:--</span><br /></div>
+          <div><span id="timeMSK2">МСК: --:--:--</span></div>
+        </nav>
+
+        <main class="mainRect">
+          <div class="altRect">
+            <div class="sgPanel">
+              <div class="sgPanelLeft">
+                <button class="sgBtn">ОСЦ</button>
+                <button class="sgBtn">УД</button>
+                <button class="sgBtn">БАСС</button>
+                <button class="sgBtn">ПЭД</button>
+                <button class="sgBtn">ФИЛЬТР</button>
+                <button class="sgBtn">РЕВЕРБ</button>
+              </div>
+              <div class="sgPanelVolume">
+                <span class="sgVolumeLabel">ГРОМКОСТЬ</span>
+                <div class="sgVolumeTrack">
+                  <div class="sgVolumeThumb"></div>
+                </div>
+                <span class="sgVolumeValue">80%</span>
+              </div>
+              <div class="sgPanelRight">
+                <button class="sgBtn">ОЧИСТИТЬ</button>
+                <button class="sgBtn">СТАРТ/СТОП</button>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <footer class="footerBar">
+          <a class="footerArrow" href="#" onclick="showPage('main')">
+            <img src="images/arrowLeft.svg" alt="←" />
+          </a>
+          <div class="footerHelp">
+            ?
+            <div class="footerHelpTooltip">
+              Здесь будет твой текст объяснения экрана.
+            </div>
+          </div>
+          <a class="footerArrow" href="#" onclick="showPage('diagnostics')">
+            <img src="images/arrowRight.svg" alt="→" />
+          </a>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         СТРАНИЦА 3 — ДИАГНОСТИКА (форма + threshold)
+    ════════════════════════════════════════════════ -->
+    <section class="page" id="page-diagnostics">
+      <div class="pageWrapper">
+        <nav class="navBar">
+          <a class="navLink" href="#" onclick="showPage('main')"
+            >Центр Фреймворк</a
+          >
+          <a class="navLink" href="#" onclick="showPage('journal')"
+            >Журнал наблюдений</a
+          >
+          <a class="navLink" href="#" onclick="showPage('sound')"
+            >Конструктор звука</a
+          >
+          <a class="navLink" href="#" onclick="showPage('diagnostics')"
+            >Диагностика</a
+          >
+        </nav>
+
+        <main class="mainRect">
+          <div class="thresholdWrap">
+            <img
+              id="sourceImg"
+              src="images/threshold.jpg"
+              alt=""
+              style="display: none"
+            />
+            <canvas id="thresholdCanvas"></canvas>
+          </div>
+
+          <form class="diagForm" id="diagForm">
+            <div class="diagField">
+              <label class="diagLabel">Имя:</label>
+              <input class="diagInput" type="text" name="name" />
+            </div>
+            <div class="diagField">
+              <label class="diagLabel">Возраст:</label>
+              <input class="diagInput" type="text" name="age" />
+            </div>
+            <div class="diagField">
+              <label class="diagLabel">Род деятельности:</label>
+              <input class="diagInput" type="text" name="occupation" />
+            </div>
+            <div class="diagField">
+              <label class="diagLabel">Уровень дискомфорта (1—10):</label>
+              <div class="diagSliderWrap">
+                <div class="diagSliderTrack">
+                  <div class="diagSliderThumb"></div>
+                </div>
+                <span class="diagSliderValue">5</span>
+              </div>
+            </div>
+            <div class="diagField">
+              <label class="diagLabel">Особые замечания:</label>
+              <input
+                class="diagInput diagInput--tall"
+                type="text"
+                name="notes"
+              />
+            </div>
+            <div class="diagButtons">
+              <button class="diagBtnSubmit" type="submit">Отправить</button>
+              <button class="diagBtnClear" type="button" id="diagClear">
+                Очистить
+              </button>
+            </div>
+          </form>
+
+          <div class="idModal" id="idModal">
+            <div class="idModalBox">
+              <p class="idModalText">Ваш ID: <span id="idModalCode"></span></p>
+              <button class="idModalBtn" id="idModalOk">OK</button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         СТРАНИЦА 4 — ТЕСТ (трекинг мыши)
+    ════════════════════════════════════════════════ -->
+    <section class="page" id="page-test">
+      <div class="pageWrapper">
+        <nav class="navBar">
+          <a class="navLink" href="#" onclick="showPage('main')"
+            >Центр Фреймворк</a
+          >
+          <a class="navLink" href="#" onclick="showPage('journal')"
+            >Журнал наблюдений</a
+          >
+          <a class="navLink" href="#" onclick="showPage('sound')"
+            >Конструктор звука</a
+          >
+          <a class="navLink" href="#" onclick="showPage('diagnostics')"
+            >Диагностика</a
+          >
+        </nav>
+
+        <main class="mainRect" id="diagRect">
+          <canvas id="diagCanvas"></canvas>
+
+          <div class="diagOverlay" id="diagStart">
+            <div class="diagOverlayBox">
+              <p class="diagOverlayTitle">Диагностика</p>
+              <p class="diagOverlayDesc">
+                Перемещайте курсор по экрану в течение 15 секунд. Система
+                анализирует характер движений.
+              </p>
+              <button class="diagOverlayBtn" id="diagStartBtn">Начать</button>
+            </div>
+          </div>
+
+          <div class="diagTimer" id="diagTimer" style="display: none">
+            <span id="diagTimerCount">15</span>
+          </div>
+
+          <div class="diagStatus" id="diagStatus" style="display: none">
+            <span id="diagStatusText">Запись...</span>
+          </div>
+
+          <div class="diagOverlay" id="diagResult" style="display: none">
+            <div class="diagOverlayBox diagOverlayBox--wide">
+              <p class="diagOverlayTitle">Результат диагностики</p>
+              <div class="diagResultGrid" id="diagResultGrid"></div>
+              <div style="display: flex; gap: 12px; margin-top: 8px">
+                <button
+                  class="diagOverlayBtn diagOverlayBtn--accept"
+                  id="diagAcceptBtn"
+                >
+                  Принять
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         СТРАНИЦА 5 — ЖУРНАЛ
+    ════════════════════════════════════════════════ -->
+    <section class="page" id="page-journal">
+      <div class="pageWrapper">
+        <nav class="navBar">
+          <a class="navLink" href="#" onclick="showPage('main')"
+            >Центр Фреймворк</a
+          >
+          <a class="navLink" href="#" onclick="showPage('journal')"
+            >Журнал наблюдений</a
+          >
+          <a class="navLink" href="#" onclick="showPage('sound')"
+            >Конструктор звука</a
+          >
+          <a class="navLink" href="#" onclick="showPage('diagnostics')"
+            >Диагностика</a
+          >
+        </nav>
+
+        <div class="journalFilters">
+          <button
+            class="sgBtn journalFilterBtn journalFilterBtn--active"
+            data-filter="all"
+          >
+            Все
+          </button>
+          <button class="sgBtn journalFilterBtn" data-filter="тревожные">
+            Тревожные
+          </button>
+          <button class="sgBtn journalFilterBtn" data-filter="стабильные">
+            Стабильные
+          </button>
+          <button class="sgBtn journalFilterBtn" data-filter="иные">
+            Иные
+          </button>
+        </div>
+
+        <main class="mainRect journalRect">
+          <div class="journalGrid" id="journalGrid"></div>
+        </main>
+
+        <footer class="footerBar">
+          <div></div>
+          <a class="footerArrow" href="#" onclick="showPage('main')">
+            <img src="images/arrowRight.svg" alt="→" />
+          </a>
+          <div></div>
+        </footer>
+      </div>
+    </section>
+
+    <script>
+      function showPanopticonInfo() {
+        const tooltip = document.getElementById('panopticonTooltip');
+        tooltip.classList.toggle('visible');
+      }
+    </script>
+  </body>
+</html>

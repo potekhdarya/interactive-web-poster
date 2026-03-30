@@ -1,3 +1,877 @@
-* {
+/* ═══════════════════════════════════════════════
+   СБРОС И БАЗА
+════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #fcfcfc;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════
+   SPA
+════════════════════════════════════════════════ */
+
+.page {
+  display: none;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.page.active {
+  display: flex;
+}
+
+/* ═══════════════════════════════════════════════
+   ОБЩИЕ КОМПОНЕНТЫ
+════════════════════════════════════════════════ */
+
+/* ─── Обёртка страницы ─── */
+
+.pageWrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0.66% 2vh 0.66%;
+}
+
+/* ─── Прямоугольник ─── */
+
+.mainRect {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  border: 1.6px solid #000;
+  display: flex;
+  position: relative;
+}
+
+/* ─── Кнопка (единый стиль для всего сайта) ─── */
+
+.btn {
+  border: 1.6px solid #000;
+  background: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  color: #000;
+  padding: 0 16px;
+  height: 36px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn--active,
+.btn:active {
+  background: #000;
+  color: #fff;
+}
+
+/* Алиас для совместимости со звуком */
+.sgBtn {
+  border: 1.6px solid #000;
+  background: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  color: #000;
+  padding: 0 16px;
+  height: 36px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Навигация ─── */
+
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1% 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.navLink {
+  font-size: 16px;
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  letter-spacing: -0.47px;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 4px 4px;
+}
+
+.navLink:hover {
+  text-decoration: none;
+  background-color: #f395ff;
+}
+
+/* ─── Футер ─── */
+
+.footerBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 0 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.footerTime {
+  font-size: 16px;
+  color: #000;
+  line-height: 1.15;
+  letter-spacing: -0.47px;
+}
+
+.footerHelp {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #000;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.footerHelp:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.footerHelpTooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 12px 16px;
+  width: 260px;
+  white-space: normal;
+  pointer-events: none;
+  z-index: 20;
+  text-align: center;
+}
+
+.footerHelp:hover .footerHelpTooltip {
+  display: block;
+}
+
+.footerArrow {
+  width: 28px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.footerArrow img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ═══════════════════════════════════════════════
+   СТРАНИЦА 1 — ГЛАВНАЯ
+════════════════════════════════════════════════ */
+
+#threeCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+#page-main .footerBar > :first-child {
+  min-width: 120px;
+}
+
+.panopticonTooltip {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 12px 16px;
+  width: 260px;
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.panopticonTooltip.visible {
+  display: block;
+}
+
+/* ═══════════════════════════════════════════════
+   СТРАНИЦА 2 — КОНСТРУКТОР ЗВУКА
+════════════════════════════════════════════════ */
+
+.timeBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1% 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.timeBar span {
+  font-size: 16px;
+  color: #000;
+  line-height: 1.15;
+  letter-spacing: -0.47px;
+}
+
+.altRect {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: 50px 50px;
+  background-origin: content-box;
+  padding: 20px 0 0 0;
+  background-color: #fff;
+  position: relative;
+}
+
+.sgPanel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  flex-shrink: 0;
+  padding: 0 20px;
+  height: 58px;
+  border-top: 1.6px solid #000;
+  gap: 0;
+}
+
+.sgPanelLeft {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.sgPanelRight {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+
+.sgPanelVolume {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 32px;
+}
+
+.sgVolumeLabel,
+.sgVolumeValue {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  white-space: nowrap;
+}
+
+.sgVolumeTrack {
+  width: 140px;
+  height: 1.6px;
+  background: #000;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sgVolumeThumb {
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 12px;
+  background: #000;
+  cursor: ew-resize;
+}
+
+/* ─── Нод-модуль ─── */
+
+.nodeThumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: #000;
+  cursor: ew-resize;
+}
+
+.nodeModule {
+  width: 232px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  cursor: default;
+  z-index: 10;
+}
+
+.nodeHeader {
+  width: 100%;
+  height: 36px;
+  background: #111;
+  border: 1.6px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+.nodeTitle {
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: -0.47px;
+  white-space: nowrap;
+  padding-left: 8px;
+}
+
+.nodeClose {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.nodeBody {
+  width: 100%;
+  border: 1.6px solid #000;
+  border-top: none;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+}
+
+.nodeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nodeLabel {
+  font-size: 16px;
+  color: #000;
+  white-space: nowrap;
+  width: 68px;
+  flex-shrink: 0;
+  letter-spacing: -0.47px;
+}
+
+.nodeSlider {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.nodeTrack {
+  position: relative;
+  width: 100%;
+  height: 1.6px;
+  background: #000;
+}
+
+.nodeConnector {
+  position: absolute;
+  right: -11px;
+  top: 87px;
+  width: 22px;
+  height: 22px;
+  border: 1.6px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  z-index: 15;
+}
+
+.nodeConnector--left {
+  right: auto;
+  left: -11px;
+}
+
+.nodeConnector--active,
+.nodeConnector--connected {
+  background: #000;
+}
+
+.altRect svg line {
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.altRect svg line:hover {
+  stroke-width: 4;
+}
+
+/* ═══════════════════════════════════════════════
+   СТРАНИЦА 3 — ДИАГНОСТИКА (форма + threshold)
+════════════════════════════════════════════════ */
+
+.thresholdWrap {
+  position: absolute;
+  inset: 0;
+  cursor: crosshair;
+}
+
+#thresholdCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.diagForm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background: #fff;
+  border: 1.6px solid #000;
+  padding: 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+}
+
+.diagField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diagLabel {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  white-space: nowrap;
+}
+
+.diagInput {
+  width: 100%;
+  height: 25px;
+  border: 1.6px solid #000;
+  background: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: #000;
+  padding: 0 4px;
+  outline: none;
+}
+
+.diagInput--tall {
+  height: 60px;
+}
+
+.diagSliderWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.diagSliderTrack {
+  position: relative;
+  flex: 1;
+  height: 1.6px;
+  background: #000;
+  cursor: ew-resize;
+}
+
+.diagSliderThumb {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: #000;
+  cursor: ew-resize;
+}
+
+.diagSliderValue {
+  font-size: 16px;
+  color: #000;
+  width: 16px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.diagButtons {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.diagBtnSubmit {
+  height: 36px;
+  padding: 0 16px;
+  background: #000;
+  color: #fff;
+  border: 1.6px solid #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  cursor: pointer;
+}
+
+.diagBtnClear {
+  height: 36px;
+  padding: 0 16px;
+  background: #fff;
+  color: #000;
+  border: 1.6px solid #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  cursor: pointer;
+}
+
+/* ─── Модалка ID ─── */
+
+.idModal {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.idModal.visible {
+  display: flex;
+  pointer-events: none;
+}
+
+.idModalBox {
+  width: 213px;
+  height: 136px;
+  background: #fff;
+  border: 1.6px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 20px 20px 20px;
+  pointer-events: all;
+  position: relative;
+}
+
+.idModalText {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+}
+
+.idModalBtn {
+  width: 100%;
+  height: 36px;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════
+   СТРАНИЦА 4 — ТРЕКИНГ
+════════════════════════════════════════════════ */
+
+#diagCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.diagOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.diagOverlayBox {
+  background: #fff;
+  border: 1.6px solid #000;
+  padding: 32px 36px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: all;
+}
+
+.diagOverlayBox--wide {
+  width: 460px;
+}
+
+.diagOverlayTitle {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  font-weight: 400;
+}
+
+.diagOverlayDesc {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  line-height: 1.4;
+}
+
+.diagOverlayBtn {
+  height: 36px;
+  background: #000;
+  color: #fff;
+  border: 1.6px solid #000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.diagOverlayBtn--accept {
+  background: #fff;
+  color: #000;
+}
+
+.diagTimer {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.diagStatus {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.diagResultGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagResultRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1.6px solid #000;
+  padding-bottom: 6px;
+}
+
+.diagResultLabel,
+.diagResultValue {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+}
+
+/* ═══════════════════════════════════════════════
+   СТРАНИЦА 5 — ЖУРНАЛ
+════════════════════════════════════════════════ */
+
+.journalFilters {
+  display: flex;
+  gap: 0;
+  padding: 0.5% 0;
+  flex-shrink: 0;
+}
+
+.journalFilterBtn {
+  border: 1.6px solid #000;
+  background: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  color: #000;
+  padding: 0 16px;
+  height: 36px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.journalFilterBtn--active {
+  background: #000;
+  color: #fff;
+}
+
+.journalRect {
+  flex-direction: column;
+  overflow-y: auto;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.journalGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.journalCard {
+  border: 1.6px solid #000;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.journalCard:hover {
+  opacity: 0.85;
+}
+
+.journalCardPreview {
+  width: 100%;
+  aspect-ratio: 358 / 184;
+  overflow: hidden;
+  background: #f0f0f0;
+  flex-shrink: 0;
+}
+
+.journalCardPreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%);
+}
+
+.journalCardBody {
+  padding: 12px 20px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.journalCardId {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  margin-bottom: 8px;
+}
+
+.journalCardMeta {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  line-height: 1.4;
+}
+
+.journalCardTag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  margin-top: 10px;
+}
+
+.journalCardTag--anxious {
+  background: #f395ff;
+  color: #000;
+}
+.journalCardTag--stable {
+  background: #9dffd3;
+  color: #000;
+}
+.journalCardTag--critical {
+  background: #000;
+  color: #fff;
+}
+.journalCardTag--other {
+  background: #e0e0e0;
+  color: #000;
+}
+
+.journalFooter {
+  justify-content: center;
+}
+
+.journalEmpty {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  padding: 40px;
 }
