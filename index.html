@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Фреймворк</title>
+    <link rel="icon" href="images/favicon.png" type="image/png" />
     <link rel="stylesheet" href="stylesheets/style.css" />
     <script
       defer
@@ -144,7 +145,9 @@
           <div class="footerHelp">
             ?
             <div class="footerHelpTooltip">
-              Здесь будет твой текст объяснения экрана.
+              Вы находитесь в прототипе конструктора звука. Похожий инструмент
+              используют работники нашего центра. Попробуйте соединять модули
+              друг с другом и получите наиболее приятный для вас звук.
             </div>
           </div>
           <a class="footerArrow" href="#" onclick="showPage('diagnostics')">
@@ -236,21 +239,18 @@
     <!-- ═══════════════════════════════════════════════
          СТРАНИЦА 4 — ТЕСТ (трекинг мыши)
     ════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════
+     СТРАНИЦА 4 — ТЕСТ (трекинг мыши)
+════════════════════════════════════════════════ -->
     <section class="page" id="page-test">
       <div class="pageWrapper">
-        <nav class="navBar">
-          <a class="navLink" href="#" onclick="showPage('main')"
-            >Центр Фреймворк</a
-          >
-          <a class="navLink" href="#" onclick="showPage('journal')"
-            >Журнал наблюдений</a
-          >
-          <a class="navLink" href="#" onclick="showPage('sound')"
-            >Конструктор звука</a
-          >
-          <a class="navLink" href="#" onclick="showPage('diagnostics')"
-            >Диагностика</a
-          >
+        <nav class="testBar">
+          <div class="testBarLeft">
+            <span id="testTimer" class="testTimerDisplay">00:15</span>
+          </div>
+          <div class="testBarRight">
+            <span id="testSessionId"></span>
+          </div>
         </nav>
 
         <main class="mainRect" id="diagRect">
@@ -258,21 +258,14 @@
 
           <div class="diagOverlay" id="diagStart">
             <div class="diagOverlayBox">
-              <p class="diagOverlayTitle">Диагностика</p>
-              <p class="diagOverlayDesc">
-                Перемещайте курсор по экрану в течение 15 секунд. Система
-                анализирует характер движений.
+              <p class="diagOverlayTitle" style="text-align: center">
+                Сейчас вы пройдете диагностику внутреннего состояния.
+                Максимально расслабьтесь, удобно расположитесь, включите любимую
+                музыку и перемещайте курсор или палец по экрану. Система
+                анализирует характер движений. Сессия длится 15 секунд.
               </p>
               <button class="diagOverlayBtn" id="diagStartBtn">Начать</button>
             </div>
-          </div>
-
-          <div class="diagTimer" id="diagTimer" style="display: none">
-            <span id="diagTimerCount">15</span>
-          </div>
-
-          <div class="diagStatus" id="diagStatus" style="display: none">
-            <span id="diagStatusText">Запись...</span>
           </div>
 
           <div class="diagOverlay" id="diagResult" style="display: none">
@@ -280,10 +273,7 @@
               <p class="diagOverlayTitle">Результат диагностики</p>
               <div class="diagResultGrid" id="diagResultGrid"></div>
               <div style="display: flex; gap: 12px; margin-top: 8px">
-                <button
-                  class="diagOverlayBtn diagOverlayBtn--accept"
-                  id="diagAcceptBtn"
-                >
+                <button class="diagOverlayBtn" id="diagAcceptBtn">
                   Принять
                 </button>
               </div>

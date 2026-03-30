@@ -3,14 +3,29 @@ function initTracking() {
   const diagCanvas = document.getElementById('diagCanvas');
   if (!diagRect || !diagCanvas) return;
 
-  const ctx = diagCanvas.getContext('2d');
+  const ctx = diagCanvas.getContext('2d', { willReadFrequently: true });
   const startBtn = document.getElementById('diagStartBtn');
-  const timerEl = document.getElementById('diagTimer');
-  const timerCount = document.getElementById('diagTimerCount');
-  const statusEl = document.getElementById('diagStatus');
   const startOverlay = document.getElementById('diagStart');
   const resultOverlay = document.getElementById('diagResult');
   const resultGrid = document.getElementById('diagResultGrid');
+  const testTimer = document.getElementById('testTimer');
+  const testSessionId = document.getElementById('testSessionId');
+
+  // ─── Персональный ID — генерируется один раз, хранится в localStorage ───
+  function getPersonalId() {
+    let pid = localStorage.getItem('fw_personal_id');
+    if (!pid) {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      pid = Array.from(
+        { length: 7 },
+        () => chars[Math.floor(Math.random() * chars.length)]
+      ).join('');
+      localStorage.setItem('fw_personal_id', pid);
+    }
+    return pid;
+  }
+
+  if (testSessionId) testSessionId.textContent = getPersonalId();
 
   let recording = false;
   let points = [],
@@ -80,20 +95,39 @@ function initTracking() {
     redraw();
   });
 
+  diagRect.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!recording) return;
+      e.preventDefault();
+      const rb = diagRect.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rb.left,
+        y = touch.clientY - rb.top,
+        t = Date.now();
+      points.push({ x, y, t });
+      heatData.push({ x, y });
+      redraw();
+    },
+    { passive: false }
+  );
+
+  function formatTime(sec) {
+    return '00:' + String(sec).padStart(2, '0');
+  }
+
   function startSession() {
     points = [];
     heatData = [];
     ctx.clearRect(0, 0, diagCanvas.width, diagCanvas.height);
     startOverlay.style.display = 'none';
     resultOverlay.style.display = 'none';
-    timerEl.style.display = 'block';
-    statusEl.style.display = 'block';
     countdown = 15;
-    timerCount.textContent = countdown;
+    if (testTimer) testTimer.textContent = formatTime(countdown);
     recording = true;
     timerInterval = setInterval(() => {
       countdown--;
-      timerCount.textContent = countdown;
+      if (testTimer) testTimer.textContent = formatTime(countdown);
       if (countdown <= 0) {
         clearInterval(timerInterval);
         endSession();
@@ -102,8 +136,8 @@ function initTracking() {
   }
 
   async function saveSession(pts, analysis) {
-    if (!sb) return 'S' + Date.now();
-    const id = 'S' + Date.now();
+    const supabase = typeof sb !== 'undefined' ? sb : null;
+    const id = getPersonalId();
     const preview = diagCanvas.toDataURL('image/png', 0.4);
     const session = {
       id,
@@ -118,32 +152,93 @@ function initTracking() {
       canvas_w: diagCanvas.width,
       canvas_h: diagCanvas.height
     };
-    const { error } = await sb.from('sessions').insert([session]);
-    if (error) console.error('Ошибка сохранения:', error);
+    if (supabase) {
+      const { error } = await supabase.from('sessions').insert([session]);
+      if (error) console.error('Ошибка сохранения:', error);
+    } else {
+      try {
+        const existing = JSON.parse(
+          localStorage.getItem('fw_sessions') || '[]'
+        );
+        existing.unshift(session);
+        localStorage.setItem(
+          'fw_sessions',
+          JSON.stringify(existing.slice(0, 50))
+        );
+      } catch (e) {
+        console.warn('localStorage недоступен:', e);
+      }
+    }
     return id;
   }
 
   async function endSession() {
     recording = false;
-    timerEl.style.display = 'none';
-    statusEl.style.display = 'none';
     const analysis = analyze(points);
     const sessionId = await saveSession(points, analysis);
     showResult(analysis, sessionId);
   }
 
+  function getConclusion(analysis) {
+    const anxiety = analysis['Тревожность'];
+    const character = analysis['Характер движения'];
+    const pauses = parseInt(analysis['Пауз обнаружено']) || 0;
+    const coverage = parseInt(analysis['Охват экрана']) || 0;
+
+    let state = '';
+    let recommendation = 'Рекомендуется обследование в Центре Фреймворк.';
+
+    if (anxiety === 'высокая' && character === 'импульсивный') {
+      state =
+        'вы испытываете выраженную тревогу и внутреннее напряжение. Движения указывают на трудности с концентрацией и повышенную реактивность.';
+    } else if (anxiety === 'высокая') {
+      state =
+        'вы испытываете тревогу. Характер движений свидетельствует о напряжённом эмоциональном фоне.';
+    } else if (character === 'импульсивный') {
+      state =
+        'вы находитесь в состоянии возбуждения или стресса. Движения хаотичны и быстры — возможна скрытая тревожность.';
+    } else if (character === 'осторожный' && pauses > 4) {
+      state =
+        'вы испытываете неуверенность или страх. Частые остановки и медленные движения указывают на внутреннее сопротивление.';
+    } else if (character === 'неуверенный') {
+      state =
+        'вы испытываете нерешительность и, возможно, скрытое беспокойство. Паузы в движении указывают на внутренний конфликт.';
+    } else if (character === 'активный' && coverage > 70) {
+      state =
+        'вы находитесь в состоянии активного поиска. Это может указывать на лёгкое беспокойство или любопытство.';
+    } else if (character === 'спокойный' && anxiety === 'низкая') {
+      state =
+        'вы находитесь в состоянии относительного спокойствия. Движения равномерны и уверенны.';
+      recommendation =
+        'Профилактическое наблюдение в Центре Фреймворк поможет сохранить этот баланс.';
+    } else {
+      state =
+        'вы находитесь в неопределённом эмоциональном состоянии. Для точного анализа требуется дополнительное наблюдение.';
+    }
+
+    return `Вероятно, ${state} ${recommendation}`;
+  }
+
   function showResult(analysis, sessionId) {
     resultGrid.innerHTML = '';
+
     const idRow = document.createElement('div');
     idRow.className = 'diagResultRow';
-    idRow.innerHTML = `<span class="diagResultLabel">ID сессии</span><span class="diagResultValue">${sessionId}</span>`;
+    idRow.innerHTML = `<span class="diagResultLabel">ID</span><span class="diagResultValue">${sessionId}</span>`;
     resultGrid.appendChild(idRow);
+
     Object.entries(analysis).forEach(([label, value]) => {
       const row = document.createElement('div');
       row.className = 'diagResultRow';
       row.innerHTML = `<span class="diagResultLabel">${label}</span><span class="diagResultValue">${value}</span>`;
       resultGrid.appendChild(row);
     });
+
+    const conclusion = document.createElement('p');
+    conclusion.className = 'diagConclusion';
+    conclusion.textContent = getConclusion(analysis);
+    resultGrid.appendChild(conclusion);
+
     resultOverlay.style.display = 'flex';
   }
 

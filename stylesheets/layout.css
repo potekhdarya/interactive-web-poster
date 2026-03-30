@@ -557,11 +557,12 @@ body {
 
 .diagButtons {
   display: flex;
-  gap: 16px;
+  gap: 0;
   margin-top: 4px;
 }
 
 .diagBtnSubmit {
+  flex: 1;
   height: 36px;
   padding: 0 16px;
   background: #000;
@@ -574,6 +575,7 @@ body {
 }
 
 .diagBtnClear {
+  flex: 1;
   height: 36px;
   padding: 0 16px;
   background: #fff;
@@ -676,6 +678,7 @@ body {
   color: #000;
   letter-spacing: -0.47px;
   font-weight: 400;
+  line-height: 1.4;
 }
 
 .diagOverlayDesc {
@@ -699,8 +702,8 @@ body {
 }
 
 .diagOverlayBtn--accept {
-  background: #fff;
-  color: #000;
+  background: #000;
+  color: #fff;
 }
 
 .diagTimer {
@@ -741,6 +744,44 @@ body {
 
 .diagResultLabel,
 .diagResultValue {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+}
+
+.diagConclusion {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  line-height: 1.5;
+  padding-top: 12px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* ─── Страница 4 — шапка теста ─── */
+.testBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1% 0;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.testBarLeft,
+.testBarRight {
+  font-size: 16px;
+  color: #000;
+  letter-spacing: -0.47px;
+  flex: 1;
+}
+
+.testBarRight {
+  text-align: right;
+}
+
+.testTimerDisplay {
   font-size: 16px;
   color: #000;
   letter-spacing: -0.47px;

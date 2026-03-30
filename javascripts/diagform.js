@@ -40,11 +40,8 @@ function initDiagForm() {
       e.preventDefault();
       diagForm.style.display = 'none';
 
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      const id = Array.from(
-        { length: 7 },
-        () => chars[Math.floor(Math.random() * chars.length)]
-      ).join('');
+      // Берём персональный ID из localStorage — тот же что на странице теста
+      const id = getPersonalId();
 
       const modal = document.getElementById('idModal');
       const codeEl = document.getElementById('idModalCode');
@@ -114,4 +111,19 @@ function initDiagForm() {
   const idModalBox = document.querySelector('.idModalBox');
   if (diagFormEl) makeWindowDraggable(diagFormEl);
   if (idModalBox) makeWindowDraggable(idModalBox);
+}
+
+// ─── Общая функция генерации персонального ID ───
+// Объявлена глобально чтобы использоваться и в diagform.js и в tracking.js
+function getPersonalId() {
+  let pid = localStorage.getItem('fw_personal_id');
+  if (!pid) {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    pid = Array.from(
+      { length: 7 },
+      () => chars[Math.floor(Math.random() * chars.length)]
+    ).join('');
+    localStorage.setItem('fw_personal_id', pid);
+  }
+  return pid;
 }

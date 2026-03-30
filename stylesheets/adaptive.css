@@ -1,0 +1,260 @@
+@media (max-width: 1024px) {
+  /* ─── Навигация ─── */
+  .navBar {
+    gap: 16px;
+  }
+
+  .navLink {
+    font-size: 14px;
+  }
+
+  /* ─── Журнал: 2 колонки вместо 4 ─── */
+  .journalGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* ─── Форма диагностики ─── */
+  .diagForm {
+    width: 340px;
+    padding: 24px 28px;
+  }
+
+  /* ─── Звуковые панели ─── */
+  .sgPanelVolume {
+    margin-left: 16px;
+  }
+
+  .sgVolumeTrack {
+    width: 100px;
+  }
+
+  .sgPanelLeft {
+    gap: 16px;
+  }
+
+  .sgPanelRight {
+    gap: 16px;
+  }
+
+  /* ─── Оверлей диагностики ─── */
+  .diagOverlayBox--wide {
+    width: 380px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   АЙФОН — 440px
+════════════════════════════════════════════════ */
+
+@media (max-width: 440px) {
+  /* ─── База ─── */
+  .pageWrapper {
+    padding: 0 3% 16px 3%;
+    height: 100dvh;
+  }
+
+  /* ─── Навигация → гамбургер ─── */
+  .navBar {
+    justify-content: space-between;
+    padding: 12px 0;
+    position: relative;
+  }
+
+  /* Показываем только первую ссылку (название) */
+  .navBar .navLink:first-child {
+    font-size: 15px;
+    font-weight: 400;
+    display: block;
+  }
+
+  /* Остальные ссылки прячем */
+  .navBar .navLink:not(:first-child) {
+    display: none;
+  }
+
+  /* Гамбургер — псевдоэлемент на навбаре */
+  .navBar::after {
+    content: '≡';
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    letter-spacing: 0;
+  }
+
+  /* ─── Футер ─── */
+  .footerBar {
+    padding: 12px 0 0 0;
+  }
+
+  .footerTime {
+    font-size: 14px;
+  }
+
+  /* ─── Страница 1 — главная ─── */
+  #threeCanvas {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ─── Страница 2 — звук ─── */
+  .timeBar {
+    padding: 12px 0;
+  }
+
+  .timeBar span {
+    font-size: 14px;
+  }
+
+  /* Панель снизу — кнопки в две строки */
+  .sgPanel {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .sgPanelLeft {
+    order: 2;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .sgPanelRight {
+    order: 3;
+    margin-left: 0;
+    gap: 8px;
+  }
+
+  .sgPanelVolume {
+    order: 1;
+    width: 100%;
+    margin-left: 0;
+    border-bottom: 1.6px solid #000;
+    padding-bottom: 10px;
+  }
+
+  .sgVolumeTrack {
+    flex: 1;
+  }
+
+  .sgBtn {
+    font-size: 13px;
+    padding: 0 10px;
+    height: 32px;
+  }
+
+  /* ─── Страница 3 — диагностика ─── */
+  .diagForm {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    padding: 20px 16px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    overflow-y: auto;
+    max-height: calc(100dvh - 120px);
+  }
+
+  /* Скрываем threshold за формой на мобиле */
+  .thresholdWrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #page-diagnostics .diagForm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow-y: auto;
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .diagLabel {
+    font-size: 14px;
+  }
+
+  .diagInput {
+    font-size: 15px;
+  }
+
+  .diagBtnSubmit,
+  .diagBtnClear {
+    flex: 1;
+    font-size: 14px;
+  }
+
+  /* ─── Страница 4 — трекинг ─── */
+  .diagOverlayBox {
+    width: calc(100% - 32px);
+    padding: 24px 20px;
+  }
+
+  .diagOverlayBox--wide {
+    width: calc(100% - 32px);
+  }
+
+  .diagOverlayTitle,
+  .diagOverlayDesc,
+  .diagOverlayBtn,
+  .diagResultLabel,
+  .diagResultValue {
+    font-size: 14px;
+  }
+
+  /* ─── Страница 5 — журнал ─── */
+  .journalFilters {
+    padding: 8px 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0;
+  }
+
+  .journalFilterBtn {
+    font-size: 13px;
+    padding: 0 12px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .journalRect {
+    padding: 12px;
+  }
+
+  /* 1 колонка на телефоне */
+  .journalGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .journalCardBody {
+    padding: 10px 14px 12px 14px;
+  }
+
+  .journalCardId,
+  .journalCardMeta,
+  .journalCardTag {
+    font-size: 14px;
+  }
+
+  /* ─── Тултип паноптикума ─── */
+  .panopticonTooltip {
+    width: calc(100% - 32px);
+    font-size: 14px;
+    bottom: 12px;
+  }
+
+  /* ─── Модалка ID ─── */
+  .idModalBox {
+    width: calc(100% - 48px);
+  }
+}
