@@ -1,5 +1,3 @@
-// ─── ЖУРНАЛ ───
-
 function generateMockPoints(count, w, h, style) {
   const pts = [];
   let x = w / 2,
@@ -99,7 +97,6 @@ const MOCK_SESSIONS = [
   }
 ];
 
-// ─── Читаем локальные сессии из localStorage ───
 function getLocalSessions() {
   try {
     const raw = localStorage.getItem('fw_sessions');
@@ -136,7 +133,6 @@ function filterGroup(tag) {
   return 'иные';
 }
 
-// ── Глитч-анимация ──────────────────────────────────────────────────────────
 const GLITCH_CHARS =
   '\u25A1\u25A0\u2592\u2593\u2591\u2588\u2580\u2584\uFFFD\u25AA\u25AB\u2022\u00B7\u25CF\u25CB\u2610\u2611\u2612\u2639\u2BEF\u16DD\u2BEB';
 
@@ -168,7 +164,6 @@ function startGlitch(el) {
   };
 }
 
-// ── Вспомогательные функции ─────────────────────────────────────────────────
 function makeScalers(points, cw, ch, pad) {
   const xs = points.map((p) => p.x),
     ys = points.map((p) => p.y);
@@ -248,7 +243,6 @@ function drawPreview(canvas, points) {
   ctx.fill();
 }
 
-// ── Воспроизведение ─────────────────────────────────────────────────────────
 let replayAnimation = null;
 let stopReplayGlitch = null;
 
@@ -366,13 +360,11 @@ function startReplay(session) {
   frame();
 }
 
-// ── Главная функция ──────────────────────────────────────────────────────────
 function loadJournal() {
   const grid = document.getElementById('journalGrid');
   const countEl = document.getElementById('journalCount');
   if (!grid) return;
 
-  // Объединяем локальные сессии + моковые
   const localSessions = getLocalSessions();
   const allSessions = [...localSessions, ...MOCK_SESSIONS];
 

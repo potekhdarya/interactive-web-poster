@@ -1,4 +1,3 @@
-// ─── ВРЕМЯ ───
 function updateTime() {
   const now = new Date();
   const fmt = (d) => {

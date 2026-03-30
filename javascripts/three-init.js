@@ -5,11 +5,9 @@ function initThree() {
   const container = canvas.parentElement;
   if (!container) return;
 
-  // ─── Сцена ───
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
 
-  // ─── Камера — вид сверху ───
   const camera = new THREE.PerspectiveCamera(
     45,
     container.clientWidth / container.clientHeight,
@@ -19,12 +17,10 @@ function initThree() {
   camera.position.set(0, 22, 0.001);
   camera.lookAt(0, 0, 0);
 
-  // ─── Рендерер ───
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight);
 
-  // ─── Орбитальные контролы ───
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
@@ -35,37 +31,30 @@ function initThree() {
   controls.enablePan = false;
   controls.target.set(0, 1, 0);
 
-  // ─── Line2 материал (гарантированная толщина) ───
   const lineMat = new THREE.LineMaterial({
     color: 0x000000,
-    linewidth: 1 // в пикселях, работает везде
+    linewidth: 1
   });
   lineMat.resolution.set(container.clientWidth, container.clientHeight);
 
-  // ── Утилиты ──────────────────────────────────────────
-
-  // Вспомогательная: массив Vector3 → Float32Array positions для LineGeometry
   function toPositions(points) {
     const arr = [];
     for (const p of points) arr.push(p.x, p.y, p.z);
     return arr;
   }
 
-  // Замкнутая линия через массив точек (Line2)
   function makeLine(points) {
     const geo = new THREE.LineGeometry();
     geo.setPositions(toPositions(points));
     return new THREE.Line2(geo, lineMat);
   }
 
-  // Набор отрезков [p0,p1, p2,p3, ...] (LineSegments2)
   function makeSegments(points) {
     const geo = new THREE.LineSegmentsGeometry();
     geo.setPositions(toPositions(points));
     return new THREE.LineSegments2(geo, lineMat);
   }
 
-  // EdgesGeometry → LineSegments2
   function wire(geo) {
     const edges = new THREE.EdgesGeometry(geo);
     const pos = edges.attributes.position.array;
@@ -74,7 +63,6 @@ function initThree() {
     return new THREE.LineSegments2(segsGeo, lineMat);
   }
 
-  // Горизонтальная окружность
   function circle(r, segs, y) {
     const pts = [];
     for (let i = 0; i <= segs; i++) {
@@ -84,7 +72,6 @@ function initThree() {
     return makeLine(pts);
   }
 
-  // Вертикальная линия
   function vline(x, y1, y2, z) {
     return makeSegments([
       new THREE.Vector3(x, y1, z),
@@ -94,9 +81,6 @@ function initThree() {
 
   const model = new THREE.Group();
 
-  // ════════════════════════════════════════════════
-  // Параметры
-  // ════════════════════════════════════════════════
   const outerR = 6;
   const wallH = 2.5;
   const wallSegs = 48;
@@ -108,9 +92,6 @@ function initThree() {
   const Y1 = wallH;
   const TY1 = towerH;
 
-  // ════════════════════════════════════════════════
-  // OUTER WALL
-  // ════════════════════════════════════════════════
   const wallGeo = new THREE.CylinderGeometry(
     outerR,
     outerR,
@@ -126,9 +107,6 @@ function initThree() {
   model.add(circle(outerR, wallSegs, Y1));
   model.add(circle(outerR, wallSegs, Y0));
 
-  // ════════════════════════════════════════════════
-  // CELLS — 12 радиальных перегородок
-  // ════════════════════════════════════════════════
   const cellDepth = outerR - towerR;
   const midR = towerR + cellDepth / 2;
 
@@ -144,9 +122,6 @@ function initThree() {
     model.add(wallCell);
   }
 
-  // ════════════════════════════════════════════════
-  // FLOOR
-  // ════════════════════════════════════════════════
   model.add(circle(towerR, towerSegs, Y0));
 
   for (let i = 0; i < cellCount; i++) {
@@ -167,9 +142,6 @@ function initThree() {
     );
   }
 
-  // ════════════════════════════════════════════════
-  // TOWER
-  // ════════════════════════════════════════════════
   const towerGeo = new THREE.CylinderGeometry(
     towerR,
     towerR,
@@ -186,9 +158,6 @@ function initThree() {
   model.add(circle(towerR, towerSegs, Y1));
   model.add(circle(towerR, towerSegs, TY1));
 
-  // ════════════════════════════════════════════════
-  // ROOF
-  // ════════════════════════════════════════════════
   const roofH = 2.5;
   const eaveR = towerR * 1.5;
   const eaveH = TY1;
@@ -200,10 +169,8 @@ function initThree() {
 
   model.add(circle(eaveR, towerSegs, eaveH));
 
-  // ════════════════════════════════════════════════
   scene.add(model);
 
-  // ─── Авто-вращение ───
   let autoRotate = true;
   controls.addEventListener('start', () => {
     autoRotate = false;
@@ -220,7 +187,6 @@ function initThree() {
   }
   animate();
 
-  // ─── Ресайз ───
   const ro = new ResizeObserver(() => {
     const w = container.clientWidth;
     const h = container.clientHeight;
@@ -228,7 +194,7 @@ function initThree() {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
-    lineMat.resolution.set(w, h); // обязательно для Line2
+    lineMat.resolution.set(w, h);
   });
   ro.observe(container);
 }

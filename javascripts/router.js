@@ -1,4 +1,3 @@
-// ─── SPA РОУТЕР ───
 let threeInitialized = false;
 let soundInitialized = false;
 let diagInitialized = false;

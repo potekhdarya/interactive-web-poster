@@ -11,7 +11,6 @@ function initTracking() {
   const testTimer = document.getElementById('testTimer');
   const testSessionId = document.getElementById('testSessionId');
 
-  // ─── Персональный ID — генерируется один раз, хранится в localStorage ───
   function getPersonalId() {
     let pid = localStorage.getItem('fw_personal_id');
     if (!pid) {

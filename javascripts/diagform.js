@@ -40,7 +40,6 @@ function initDiagForm() {
       e.preventDefault();
       diagForm.style.display = 'none';
 
-      // Берём персональный ID из localStorage — тот же что на странице теста
       const id = getPersonalId();
 
       const modal = document.getElementById('idModal');
@@ -64,7 +63,6 @@ function initDiagForm() {
     });
   }
 
-  // Перетаскивание окон
   function makeWindowDraggable(el) {
     const mRect = document.querySelector('#page-diagnostics .mainRect');
     let startX, startY, startLeft, startTop;
@@ -113,8 +111,6 @@ function initDiagForm() {
   if (idModalBox) makeWindowDraggable(idModalBox);
 }
 
-// ─── Общая функция генерации персонального ID ───
-// Объявлена глобально чтобы использоваться и в diagform.js и в tracking.js
 function getPersonalId() {
   let pid = localStorage.getItem('fw_personal_id');
   if (!pid) {

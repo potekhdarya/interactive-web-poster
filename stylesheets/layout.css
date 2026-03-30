@@ -1,7 +1,3 @@
-/* ═══════════════════════════════════════════════
-   СБРОС И БАЗА
-════════════════════════════════════════════════ */
-
 *,
 *::before,
 *::after {
@@ -20,10 +16,6 @@ body {
   font-weight: 400;
 }
 
-/* ═══════════════════════════════════════════════
-   SPA
-════════════════════════════════════════════════ */
-
 .page {
   display: none;
   width: 100%;
@@ -35,12 +27,6 @@ body {
   display: flex;
 }
 
-/* ═══════════════════════════════════════════════
-   ОБЩИЕ КОМПОНЕНТЫ
-════════════════════════════════════════════════ */
-
-/* ─── Обёртка страницы ─── */
-
 .pageWrapper {
   width: 100%;
   height: 100vh;
@@ -48,8 +34,6 @@ body {
   flex-direction: column;
   padding: 0 0.66% 2vh 0.66%;
 }
-
-/* ─── Прямоугольник ─── */
 
 .mainRect {
   width: 100%;
@@ -59,8 +43,6 @@ body {
   display: flex;
   position: relative;
 }
-
-/* ─── Кнопка (единый стиль для всего сайта) ─── */
 
 .btn {
   border: 1.6px solid #000;
@@ -84,7 +66,6 @@ body {
   color: #fff;
 }
 
-/* Алиас для совместимости со звуком */
 .sgBtn {
   border: 1.6px solid #000;
   background: #fff;
@@ -100,8 +81,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-/* ─── Навигация ─── */
 
 .navBar {
   display: flex;
@@ -127,8 +106,6 @@ body {
   text-decoration: none;
   background-color: #f395ff;
 }
-
-/* ─── Футер ─── */
 
 .footerBar {
   display: flex;
@@ -204,10 +181,6 @@ body {
   height: 100%;
 }
 
-/* ═══════════════════════════════════════════════
-   СТРАНИЦА 1 — ГЛАВНАЯ
-════════════════════════════════════════════════ */
-
 #threeCanvas {
   width: 100%;
   height: 100%;
@@ -241,10 +214,6 @@ body {
 .panopticonTooltip.visible {
   display: block;
 }
-
-/* ═══════════════════════════════════════════════
-   СТРАНИЦА 2 — КОНСТРУКТОР ЗВУКА
-════════════════════════════════════════════════ */
 
 .timeBar {
   display: flex;
@@ -337,8 +306,6 @@ body {
   background: #000;
   cursor: ew-resize;
 }
-
-/* ─── Нод-модуль ─── */
 
 .nodeThumb {
   position: absolute;
@@ -462,10 +429,6 @@ body {
   stroke-width: 4;
 }
 
-/* ═══════════════════════════════════════════════
-   СТРАНИЦА 3 — ДИАГНОСТИКА (форма + threshold)
-════════════════════════════════════════════════ */
-
 .thresholdWrap {
   position: absolute;
   inset: 0;
@@ -587,8 +550,6 @@ body {
   cursor: pointer;
 }
 
-/* ─── Модалка ID ─── */
-
 .idModal {
   display: none;
   position: absolute;
@@ -635,10 +596,6 @@ body {
   letter-spacing: -0.47px;
   cursor: pointer;
 }
-
-/* ═══════════════════════════════════════════════
-   СТРАНИЦА 4 — ТРЕКИНГ
-════════════════════════════════════════════════ */
 
 #diagCanvas {
   position: absolute;
@@ -759,7 +716,6 @@ body {
   text-align: center;
 }
 
-/* ─── Страница 4 — шапка теста ─── */
 .testBar {
   display: flex;
   align-items: center;
@@ -786,10 +742,6 @@ body {
   color: #000;
   letter-spacing: -0.47px;
 }
-
-/* ═══════════════════════════════════════════════
-   СТРАНИЦА 5 — ЖУРНАЛ
-════════════════════════════════════════════════ */
 
 .journalFilters {
   display: flex;
