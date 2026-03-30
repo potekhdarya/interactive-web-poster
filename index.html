@@ -69,6 +69,42 @@
           <a class="navLink" href="#" onclick="showPage('main')"
             >Центр Фреймворк</a
           >
+          <button
+            class="burgerBtn"
+            onclick="toggleBurger(this)"
+            aria-label="Меню"
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <div class="navDropdown">
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('journal');
+              "
+              >Журнал наблюдений</a
+            >
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('sound');
+              "
+              >Конструктор звука</a
+            >
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('diagnostics');
+              "
+              >Диагностика</a
+            >
+          </div>
           <a class="navLink" href="#" onclick="showPage('journal')"
             >Журнал наблюдений</a
           >
@@ -166,6 +202,42 @@
           <a class="navLink" href="#" onclick="showPage('main')"
             >Центр Фреймворк</a
           >
+          <button
+            class="burgerBtn"
+            onclick="toggleBurger(this)"
+            aria-label="Меню"
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <div class="navDropdown">
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('journal');
+              "
+              >Журнал наблюдений</a
+            >
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('sound');
+              "
+              >Конструктор звука</a
+            >
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('diagnostics');
+              "
+              >Диагностика</a
+            >
+          </div>
           <a class="navLink" href="#" onclick="showPage('journal')"
             >Журнал наблюдений</a
           >
@@ -239,9 +311,6 @@
     <!-- ═══════════════════════════════════════════════
          СТРАНИЦА 4 — ТЕСТ (трекинг мыши)
     ════════════════════════════════════════════════ -->
-    <!-- ═══════════════════════════════════════════════
-     СТРАНИЦА 4 — ТЕСТ (трекинг мыши)
-════════════════════════════════════════════════ -->
     <section class="page" id="page-test">
       <div class="pageWrapper">
         <nav class="testBar">
@@ -292,6 +361,42 @@
           <a class="navLink" href="#" onclick="showPage('main')"
             >Центр Фреймворк</a
           >
+          <button
+            class="burgerBtn"
+            onclick="toggleBurger(this)"
+            aria-label="Меню"
+          >
+            <span></span><span></span><span></span>
+          </button>
+          <div class="navDropdown">
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('journal');
+              "
+              >Журнал наблюдений</a
+            >
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('sound');
+              "
+              >Конструктор звука</a
+            >
+            <a
+              class="navLink"
+              href="#"
+              onclick="
+                closeBurger();
+                showPage('diagnostics');
+              "
+              >Диагностика</a
+            >
+          </div>
           <a class="navLink" href="#" onclick="showPage('journal')"
             >Журнал наблюдений</a
           >
@@ -340,6 +445,22 @@
         const tooltip = document.getElementById('panopticonTooltip');
         tooltip.classList.toggle('visible');
       }
+
+      function toggleBurger(btn) {
+        btn.classList.toggle('open');
+        btn.nextElementSibling.classList.toggle('open');
+      }
+
+      function closeBurger() {
+        document.querySelectorAll('.burgerBtn.open').forEach((b) => {
+          b.classList.remove('open');
+          b.nextElementSibling.classList.remove('open');
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.navBar')) closeBurger();
+      });
     </script>
   </body>
 </html>

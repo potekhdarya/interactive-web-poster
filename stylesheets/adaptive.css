@@ -1,88 +1,189 @@
+/* ═══════════════════════════════════════════════
+   АДАПТИВЫ — Фреймворк
+   440×956  → max-width: 440px
+   1024×1366 → max-width: 1024px
+════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════
+   БУРГЕР (общий, используется на стр. 1, 3, 5)
+════════════════════════════════════════════════ */
+
+.burgerBtn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  z-index: 200;
+}
+
+.burgerBtn span {
+  display: block;
+  width: 100%;
+  height: 1.6px;
+  background: #000;
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+}
+
+.burgerBtn.open span:nth-child(1) {
+  transform: translateY(6.6px) rotate(45deg);
+}
+.burgerBtn.open span:nth-child(2) {
+  opacity: 0;
+}
+.burgerBtn.open span:nth-child(3) {
+  transform: translateY(-6.6px) rotate(-45deg);
+}
+
+.navDropdown {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fcfcfc;
+  border-bottom: 1.6px solid #000;
+  z-index: 100;
+  padding: 8px 0;
+  /* Показываем все пункты без обрезки */
+  overflow: visible;
+  max-height: none;
+}
+
+.navDropdown.open {
+  display: flex;
+}
+
+/* Все ссылки в дропдауне всегда видны — перебиваем медиа-правила */
+.navDropdown .navLink {
+  display: block !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+  border-bottom: none !important;
+}
+
+.navDropdown .navLink {
+  padding: 10px 16px;
+  font-size: 16px;
+  letter-spacing: -0.47px;
+  border-bottom: none;
+  display: block;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.navDropdown .navLink:last-child {
+  border-bottom: none;
+}
+
+/* navBar нужен relative для позиционирования дропдауна */
+.navBar {
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════
+   ПЛАНШЕТ — 1024px
+════════════════════════════════════════════════ */
+
 @media (max-width: 1024px) {
-  /* ─── Навигация ─── */
-  .navBar {
-    gap: 16px;
+  /* ─── Обёртка ─── */
+  .pageWrapper {
+    padding: 0 1.2% 2vh 1.2%;
   }
 
-  .navLink {
-    font-size: 14px;
+  /* ─── Навигация — бургер ─── */
+  .navBar .navLink {
+    display: none;
   }
 
-  /* ─── Журнал: 2 колонки вместо 4 ─── */
-  .journalGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+  .burgerBtn {
+    display: flex;
   }
 
-  /* ─── Форма диагностики ─── */
-  .diagForm {
-    width: 340px;
-    padding: 24px 28px;
+  /* Логотип (первый navLink) всегда виден */
+  .navBar .navLink:first-child {
+    display: inline-flex;
   }
 
-  /* ─── Звуковые панели ─── */
-  .sgPanelVolume {
-    margin-left: 16px;
-  }
-
-  .sgVolumeTrack {
-    width: 100px;
+  /* ─── Страница 2 — звук: панель в две строки ─── */
+  .sgPanel {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 12px 16px;
+    gap: 12px;
   }
 
   .sgPanelLeft {
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sgPanelVolume {
+    margin-left: 0;
+    order: 3;
+    width: 100%;
   }
 
   .sgPanelRight {
-    gap: 16px;
+    margin-left: auto;
   }
 
-  /* ─── Оверлей диагностики ─── */
+  /* ─── Страница 3 — форма ─── */
+  .diagForm {
+    width: 360px;
+    padding: 24px 28px;
+  }
+
+  /* ─── Страница 4 — результат ─── */
   .diagOverlayBox--wide {
-    width: 380px;
+    width: 420px;
+  }
+
+  /* ─── Страница 5 — журнал: 3 колонки ─── */
+  .journalGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
 }
 
 /* ═══════════════════════════════════════════════
-   АЙФОН — 440px
+   МОБИЛЬНЫЙ — 440px
 ════════════════════════════════════════════════ */
 
 @media (max-width: 440px) {
-  /* ─── База ─── */
+  /* ─── Обёртка ─── */
   .pageWrapper {
-    padding: 0 3% 16px 3%;
-    height: 100dvh;
+    padding: 0 3.5% 16px 3.5%;
   }
 
-  /* ─── Навигация → гамбургер ─── */
+  /* ─── Навигация — бургер ─── */
   .navBar {
-    justify-content: space-between;
     padding: 12px 0;
-    position: relative;
   }
 
-  /* Показываем только первую ссылку (название) */
-  .navBar .navLink:first-child {
-    font-size: 15px;
-    font-weight: 400;
-    display: block;
-  }
-
-  /* Остальные ссылки прячем */
-  .navBar .navLink:not(:first-child) {
+  .navBar .navLink {
     display: none;
   }
 
-  /* Гамбургер — псевдоэлемент на навбаре */
-  .navBar::after {
-    content: '≡';
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    letter-spacing: 0;
+  .burgerBtn {
+    display: flex;
   }
 
-  /* ─── Футер ─── */
+  /* Логотип (первый navLink) всегда виден */
+  .navBar .navLink:first-child {
+    display: inline-flex;
+  }
+
+  /* ─── Страница 1 — футер ─── */
   .footerBar {
     padding: 12px 0 0 0;
   }
@@ -91,170 +192,186 @@
     font-size: 14px;
   }
 
-  /* ─── Страница 1 — главная ─── */
-  #threeCanvas {
-    position: absolute;
-    inset: 0;
-  }
-
   /* ─── Страница 2 — звук ─── */
   .timeBar {
     padding: 12px 0;
   }
 
-  .timeBar span {
-    font-size: 14px;
-  }
-
-  /* Панель снизу — кнопки в две строки */
   .sgPanel {
-    flex-wrap: wrap;
+    flex-direction: column;
     height: auto;
     padding: 10px 12px;
     gap: 8px;
+    align-items: flex-start;
   }
 
+  /* Строка 1: все модули + ОЧИСТИТЬ + СТАРТ/СТОП в одну строку с переносом */
   .sgPanelLeft {
-    order: 2;
-    gap: 8px;
     flex-wrap: wrap;
-  }
-
-  .sgPanelRight {
-    order: 3;
-    margin-left: 0;
-    gap: 8px;
-  }
-
-  .sgPanelVolume {
-    order: 1;
+    gap: 5px;
     width: 100%;
+  }
+
+  .sgBtn {
+    font-size: 12px;
+    padding: 0 8px;
+    height: 30px;
+    letter-spacing: -0.3px;
+  }
+
+  /* ОЧИСТИТЬ и СТАРТ/СТОП — в ту же строку что и модули */
+  .sgPanelRight {
     margin-left: 0;
-    border-bottom: 1.6px solid #000;
-    padding-bottom: 10px;
+    gap: 5px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  /* ─── Страница 2 — нод-модули меньше ─── */
+  .nodeModule {
+    width: 160px;
+  }
+
+  .nodeHeader {
+    height: 30px;
+    padding: 0 8px;
+  }
+
+  .nodeTitle {
+    font-size: 13px;
+  }
+
+  .nodeBody {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .nodeLabel {
+    font-size: 13px;
+    width: 52px;
+  }
+
+  /* Строка 2: ГРОМКОСТЬ компактно */
+  .sgPanelVolume {
+    margin-left: 0;
+    width: 100%;
+    gap: 8px;
+    order: 10;
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .sgVolumeLabel {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .sgVolumeValue {
+    font-size: 12px;
+    white-space: nowrap;
   }
 
   .sgVolumeTrack {
     flex: 1;
   }
 
-  .sgBtn {
-    font-size: 13px;
-    padding: 0 10px;
-    height: 32px;
-  }
-
-  /* ─── Страница 3 — диагностика ─── */
+  /* ─── Страница 3 — форма ─── */
   .diagForm {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    width: 100%;
+    width: calc(100% - 32px);
     padding: 20px 16px;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    overflow-y: auto;
-    max-height: calc(100dvh - 120px);
-  }
-
-  /* Скрываем threshold за формой на мобиле */
-  .thresholdWrap {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-
-  #page-diagnostics .diagForm {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: none;
-    width: 100%;
-    height: 100%;
-    border: none;
-    overflow-y: auto;
-    z-index: 5;
-    background: rgba(255, 255, 255, 0.92);
-  }
-
-  .diagLabel {
-    font-size: 14px;
+    gap: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .diagInput {
-    font-size: 15px;
+    font-size: 16px; /* не меньше 16 — иначе зум на iOS */
   }
 
-  .diagBtnSubmit,
-  .diagBtnClear {
-    flex: 1;
-    font-size: 14px;
+  /* ─── Страница 3 — модалка ID ─── */
+  .idModalBox {
+    width: calc(100% - 48px);
   }
 
-  /* ─── Страница 4 — трекинг ─── */
+  /* ─── Страница 4 — тест, шапка ─── */
+  .testBar {
+    padding: 12px 0;
+  }
+
+  /* ─── Страница 4 — оверлей старт/результат ─── */
   .diagOverlayBox {
     width: calc(100% - 32px);
-    padding: 24px 20px;
+    padding: 20px 16px;
+    max-height: 85vh;
+    overflow-y: auto;
   }
 
   .diagOverlayBox--wide {
     width: calc(100% - 32px);
+    max-height: 85vh;
+    overflow-y: auto;
   }
 
-  .diagOverlayTitle,
-  .diagOverlayDesc,
-  .diagOverlayBtn,
-  .diagResultLabel,
+  .diagResultRow {
+    flex-direction: row;
+    gap: 4px;
+    padding-bottom: 6px;
+    align-items: baseline;
+  }
+
+  .diagResultLabel {
+    font-size: 12px;
+    color: #555;
+    flex-shrink: 0;
+  }
+
   .diagResultValue {
     font-size: 14px;
+    text-align: right;
+  }
+
+  .diagConclusion {
+    font-size: 14px;
+    padding-top: 8px;
+    margin-top: 2px;
   }
 
   /* ─── Страница 5 — журнал ─── */
   .journalFilters {
+    flex-wrap: wrap;
+    gap: 6px;
     padding: 8px 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 0;
   }
 
   .journalFilterBtn {
     font-size: 13px;
-    padding: 0 12px;
     height: 32px;
-    flex-shrink: 0;
+    padding: 0 12px;
+  }
+
+  .journalGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .journalRect {
     padding: 12px;
   }
 
-  /* 1 колонка на телефоне */
-  .journalGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .journalCardBody {
-    padding: 10px 14px 12px 14px;
-  }
-
-  .journalCardId,
-  .journalCardMeta,
-  .journalCardTag {
+  /* ─── Тултип — не вылезает за экран ─── */
+  .footerHelpTooltip {
+    width: 220px;
+    left: auto;
+    right: -8px;
+    transform: none;
     font-size: 14px;
   }
 
-  /* ─── Тултип паноптикума ─── */
   .panopticonTooltip {
     width: calc(100% - 32px);
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 14px;
-    bottom: 12px;
-  }
-
-  /* ─── Модалка ID ─── */
-  .idModalBox {
-    width: calc(100% - 48px);
   }
 }

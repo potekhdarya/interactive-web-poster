@@ -148,8 +148,8 @@ function initSound() {
       flt.frequency.value = p.tone;
       const conv = ac.createConvolver();
       conv.buffer = rb;
-      const entry = ac.createGain();
-      const g = ac.createGain();
+      const entry = ac.createGain(),
+        g = ac.createGain();
       g.gain.value = p.mix / 100;
       entry.connect(flt);
       flt.connect(conv);
@@ -329,8 +329,24 @@ function initSound() {
     updateConnectorStates();
   }
 
+  // ─── Слайдер: mouse + touch ───
   function makeSlider(track, thumb, onUpdate) {
     let dragging = false;
+
+    function getX(e) {
+      return e.touches ? e.touches[0].clientX : e.clientX;
+    }
+
+    function move(e) {
+      const bounds = track.getBoundingClientRect();
+      let pct = (getX(e) - bounds.left) / bounds.width;
+      pct = Math.max(0, Math.min(1, pct));
+      thumb.style.left = pct * 100 + '%';
+      thumb.style.top = '50%';
+      thumb.style.transform = 'translate(-50%, -50%)';
+      if (onUpdate) onUpdate(pct);
+    }
+
     track.addEventListener('mousedown', (e) => {
       dragging = true;
       move(e);
@@ -343,48 +359,96 @@ function initSound() {
     document.addEventListener('mouseup', () => {
       dragging = false;
     });
-    function move(e) {
-      const bounds = track.getBoundingClientRect();
-      let pct = (e.clientX - bounds.left) / bounds.width;
-      pct = Math.max(0, Math.min(1, pct));
-      thumb.style.left = pct * 100 + '%';
-      thumb.style.top = '50%';
-      thumb.style.transform = 'translate(-50%, -50%)';
-      if (onUpdate) onUpdate(pct);
-    }
+
+    track.addEventListener(
+      'touchstart',
+      (e) => {
+        dragging = true;
+        move(e);
+        e.stopPropagation();
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+    document.addEventListener(
+      'touchmove',
+      (e) => {
+        if (dragging) move(e);
+      },
+      { passive: false }
+    );
+    document.addEventListener('touchend', () => {
+      dragging = false;
+    });
   }
 
+  // ─── Перетаскивание модуля: mouse + touch ───
   function makeDraggable(el) {
     let startX, startY, startLeft, startTop;
-    el.querySelector('.nodeHeader').addEventListener('mousedown', (e) => {
-      if (e.target.classList.contains('nodeClose')) return;
-      startX = e.clientX;
-      startY = e.clientY;
+
+    function onStart(clientX, clientY) {
+      startX = clientX;
+      startY = clientY;
       startLeft = parseInt(el.style.left) || 0;
       startTop = parseInt(el.style.top) || 0;
       el.style.zIndex = ++moduleCounter + 10;
-      function onMove(e) {
-        const rb = altRect.getBoundingClientRect();
-        el.style.left =
-          Math.max(
-            0,
-            Math.min(startLeft + e.clientX - startX, rb.width - el.offsetWidth)
-          ) + 'px';
-        el.style.top =
-          Math.max(
-            0,
-            Math.min(startTop + e.clientY - startY, rb.height - el.offsetHeight)
-          ) + 'px';
-        updateLines();
+    }
+
+    function onMove(clientX, clientY) {
+      const rb = altRect.getBoundingClientRect();
+      el.style.left =
+        Math.max(
+          0,
+          Math.min(startLeft + clientX - startX, rb.width - el.offsetWidth)
+        ) + 'px';
+      el.style.top =
+        Math.max(
+          0,
+          Math.min(startTop + clientY - startY, rb.height - el.offsetHeight)
+        ) + 'px';
+      updateLines();
+    }
+
+    const header = el.querySelector('.nodeHeader');
+
+    // Mouse
+    header.addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('nodeClose')) return;
+      onStart(e.clientX, e.clientY);
+      function onMoveM(e) {
+        onMove(e.clientX, e.clientY);
       }
       function onUp() {
-        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mousemove', onMoveM);
         document.removeEventListener('mouseup', onUp);
       }
-      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mousemove', onMoveM);
       document.addEventListener('mouseup', onUp);
       e.preventDefault();
     });
+
+    // Touch
+    header.addEventListener(
+      'touchstart',
+      (e) => {
+        if (e.target.classList.contains('nodeClose')) return;
+        const t = e.touches[0];
+        onStart(t.clientX, t.clientY);
+        function onMoveT(e) {
+          const t = e.touches[0];
+          onMove(t.clientX, t.clientY);
+          e.preventDefault();
+        }
+        function onEnd() {
+          document.removeEventListener('touchmove', onMoveT);
+          document.removeEventListener('touchend', onEnd);
+        }
+        document.addEventListener('touchmove', onMoveT, { passive: false });
+        document.addEventListener('touchend', onEnd);
+        e.preventDefault();
+      },
+      { passive: false }
+    );
   }
 
   function createModule(name) {
@@ -398,8 +462,24 @@ function initSound() {
     const mod = document.createElement('div');
     mod.className = 'nodeModule';
     mod.dataset.uid = uid;
-    mod.style.left = 40 + Math.random() * Math.max(0, rect.width - 320) + 'px';
-    mod.style.top = 40 + Math.random() * Math.max(0, rect.height - 220) + 'px';
+    const modW = 170;
+    const modH = 200;
+    mod.style.left =
+      Math.max(
+        0,
+        Math.min(
+          40 + Math.random() * Math.max(0, rect.width - modW - 40),
+          rect.width - modW
+        )
+      ) + 'px';
+    mod.style.top =
+      Math.max(
+        0,
+        Math.min(
+          40 + Math.random() * Math.max(0, rect.height - modH - 40),
+          rect.height - modH
+        )
+      ) + 'px';
     mod.style.zIndex = moduleCounter + 10;
 
     mod.innerHTML = `
